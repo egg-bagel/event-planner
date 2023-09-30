@@ -1,0 +1,20 @@
+<h1>Create New Event</h1>
+
+<% if @event.errors.any? %>
+  <% @event.errors.full_messages.each do |message|%>\
+  <h3><%= message %> </h3>
+  <%end%>
+<%end%></br>
+
+<%= form_with(model: @event, url: "/events") do |form| %>
+  <%= form.label :name, "Event name:" %>
+  <%= form.text_area :name %>
+
+  <%= form.label :date, "Date:" %>
+  <%= form.date_field :date %>
+
+  <%= form.label :location, "Location:" %>
+  <%= form.text_area :location %>
+
+  <%= form.submit "Submit" %>
+<% end %>

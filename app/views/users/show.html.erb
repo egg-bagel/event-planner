@@ -1,0 +1,7 @@
+<h1>Overview for user <%= @user.email %> </h1>
+
+<% @events.each do |event| %>
+  <b>Name: <%= event.name %></b><br>
+  <b>Date: </b> <%= event.date %><br>
+  <b>Location: </b> <%= event.location %><br>
+<% end %>
