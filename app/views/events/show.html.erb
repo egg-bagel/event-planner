@@ -2,4 +2,9 @@
 
 <p>Created by: </p><%= @creator.email %>
 <p>Date: </p><%= @event.date %>
-<p>Location: </p><%= @event.location %>
+<p>Location: </p><%= @event.location %><br>
+
+<b>Attendees:</b><br>
+<% @event.attendees.each do |attendee| %>
+  <p><%= attendee.email %></p>
+<% end %>

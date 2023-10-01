@@ -4,4 +4,9 @@
   <b><%= event.name %></b><br>
   <%= event.date %><br>
   <%= event.location %><br>
+
+  <%= form_with(model: event, url: "/signups", method: :post) do |form| %>
+    <%= form.hidden_field :id, :value => event.id %>
+    <%= form.submit "Sign up for this event" %>
+  <% end %>
 <% end %>

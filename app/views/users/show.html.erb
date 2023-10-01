@@ -1,7 +1,28 @@
 <h1>Overview for user <%= @user.email %> </h1>
 
+<h2>Events created</h2>
 <% @events.each do |event| %>
   <b>Name: <%= event.name %></b><br>
   <b>Date: </b> <%= event.date %><br>
   <b>Location: </b> <%= event.location %><br>
+<% end %>
+
+<h2>Events attending</h2><br>
+
+<h3>Past events</h3><br>
+<% @attended_events.each do |event| %>
+  <% if event.date < Date.today %>
+    <b>Name: <%= event.name %></b><br>
+    <b>Date: </b> <%= event.date %><br>
+    <b>Location: </b> <%= event.location %><br>
+  <% end %>
+<% end %>
+
+<h3>Future events</h3><br>
+<% @attended_events.each do |event| %>
+  <% if event.date >= Date.today %>
+    <b>Name: <%= event.name %></b><br>
+    <b>Date: </b> <%= event.date %><br>
+    <b>Location: </b> <%= event.location %><br>
+  <% end %>
 <% end %>
