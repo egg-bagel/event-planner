@@ -1,10 +1,17 @@
+<% if current_user %>
+  <h4>You are signed in as: <%= "#{current_user.username}" %></h4>
+<% end %>
+
 <h1>Overview for user <%= @user.email %> </h1>
 
 <h2>Events created</h2>
 <% @events.each do |event| %>
-  <b>Name: <%= event.name %></b><br>
+  <b><%= link_to "#{event.name}", event_path(:id => event.id) %></b><br>
   <b>Date: </b> <%= event.date %><br>
   <b>Location: </b> <%= event.location %><br>
+  <% if (event.creator_id == current_user.id) && (event.date >= Date.today) %>
+    <%= button_to "Edit this event", edit_event_path(:id => event.id), :method => :get %>
+  <% end %>
 <% end %>
 
 <h2>Events attending</h2><br>
@@ -12,7 +19,8 @@
 <h3>Past events</h3><br>
 <% @attended_events.each do |event| %>
   <% if event.date < Date.today %>
-    <b>Name: <%= event.name %></b><br>
+  <b><%= link_to "#{event.name}", event_path(:id => event.id) %></b><br>
+    <b>Host: </b> <%= link_to "#{User.find(event.creator_id).username}", show_user_path(:id => event.creator_id) %><br>
     <b>Date: </b> <%= event.date %><br>
     <b>Location: </b> <%= event.location %><br>
   <% end %>
@@ -21,8 +29,15 @@
 <h3>Future events</h3><br>
 <% @attended_events.each do |event| %>
   <% if event.date >= Date.today %>
-    <b>Name: <%= event.name %></b><br>
+  <b><%= link_to "#{event.name}", event_path(:id => event.id) %></b><br>
+    <b>Host: </b> <%= link_to "#{User.find(event.creator_id).username}", show_user_path(:id => event.creator_id) %><br>
     <b>Date: </b> <%= event.date %><br>
     <b>Location: </b> <%= event.location %><br>
+
+    <% if current_user.id == params[:id].to_i %>
+      <% signup_to_delete = event.signups.find_by attendee_id: current_user.id %>
+      <%= button_to "Unattend this event", signup_path(id: signup_to_delete.id), method: :delete %><br>
+    <% end %>
+
   <% end %>
 <% end %>

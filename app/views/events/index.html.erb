@@ -1,12 +1,42 @@
+<% flash.each do |type, msg| %>
+  <div>
+    <%= msg %>
+  </div>
+<% end %>
+
 <h1>All Events</h1>
 
-<% @events.each do |event| %>
-  <b><%= event.name %></b><br>
-  <%= event.date %><br>
-  <%= event.location %><br>
+<% if current_user %>
+  <h4>You are signed in as: <%= "#{current_user.username}" %></h4>
+<% end %>
 
-  <%= form_with(model: event, url: "/signups", method: :post) do |form| %>
-    <%= form.hidden_field :id, :value => event.id %>
-    <%= form.submit "Sign up for this event" %>
+<h2>Past Events</h2>
+<% Event.past.each do |event| %>
+  Name: <b><%= link_to "#{event.name}", event_path(:id => event.id) %></b><br>
+  Host:  <%= link_to "#{User.find(event.creator_id).username}", show_user_path(:id => event.creator_id) %><br>
+  Date:<%= event.date %><br>
+  Location: <%= event.location %><br>
+<% end %>
+
+<h2>Future Events</h2>
+<% Event.upcoming.each do |event| %>
+  Name: <b><%= link_to "#{event.name}", event_path(:id => event.id) %></b><br>
+  Host:  <%= link_to "#{User.find(event.creator_id).username}", show_user_path(:id => event.creator_id) %><br>
+  Date: <%= event.date %><br>
+  Location: <%= event.location %><br>
+
+  <% if current_user %>
+    <% if current_user.id == event.creator_id %>
+    <%= button_to "Edit this event", edit_event_path(:id => event.id), :method => :get %>
+    <% elsif event.attendees.where(id: current_user.id).any? %>
+      <% signup_to_delete = event.signups.find_by attendee_id: current_user.id %>
+      <%= button_to "Unattend this event", signup_path(id: signup_to_delete.id), method: :delete %><br>
+    <% else %><br>
+      <%= form_with(model: event, url: "/signups", method: :post) do |form| %>
+      <%= form.hidden_field :id, :value => event.id %>
+      <%= form.submit "Sign up for this event" %>
+      <% end %><br>
+    <% end %><br>
   <% end %>
+
 <% end %>

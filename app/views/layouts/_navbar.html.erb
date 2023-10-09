@@ -1,0 +1,18 @@
+<header>
+  <div class="container">
+    <nav>
+      <ul>
+        <% if user_signed_in? %>
+          <li><%= link_to "Home", root_path %></li>
+          <li><%= link_to "My Events", show_user_path(:id => current_user.id) %></li>
+          <li><%= link_to "Create New Event", new_event_path %></li>
+          <li><%= link_to "Sign Out", destroy_user_session_path, data: { "turbo-method": :delete } %></li>
+        <% else %>
+          <li><%= link_to "Home", root_path %></li>
+          <li><%= link_to "Create New Account", new_user_registration_path %></li>
+          <li><%= link_to "Sign In", new_user_session_path %></li>
+        <% end %>
+      </ul>
+    </nav>
+  </div>
+</header>

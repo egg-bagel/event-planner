@@ -4,7 +4,8 @@
   </div>
 <% end %>
 
-<h1>Create New Event</h1>
+<h1>Edit Event</h1>
+<h3>Editing: <%= @event.name %></h3>
 
 <% if @event.errors.any? %>
   <% @event.errors.full_messages.each do |message|%>\
@@ -12,7 +13,7 @@
   <%end%>
 <%end%></br>
 
-<%= form_with(model: @event, url: "/events") do |form| %>
+<%= form_with(model: @event, url: event_path(:id => @event.id), method: "patch") do |form| %>
   <%= form.label :name, "Event name:" %>
   <%= form.text_field :name %>
 
@@ -23,4 +24,6 @@
   <%= form.text_field :location %>
 
   <%= form.submit "Submit" %>
-<% end %>
+<% end %><br>
+
+<%= button_to "Delete this event", event_path(:id => @event.id), method: :delete %>
